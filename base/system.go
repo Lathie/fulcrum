@@ -1,7 +1,7 @@
 package base
 
 type System interface {
-	Update()
-	SendMessage(s *System, str string)
-	RecieveMessage()
+	Update() bool
+	SendMessage(s *System, str string) bool
+	RecieveMessage() bool
 }

@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Lathie/fulcrum/text"
+)
 
 func main() {
-	fmt.Println("hello world :^)")
+	engine := text.NewEngine()
+	engine.MainLoop()
 }

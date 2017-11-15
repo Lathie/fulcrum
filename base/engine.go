@@ -25,6 +25,6 @@ Holy shit this will not end well
 
 type Engine interface {
 	Init()
-	Update()
+	Update() bool
 	MainLoop()
 }
