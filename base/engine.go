@@ -20,9 +20,12 @@ So components will be interfaces to systems
 
 ----There will be an entity manager system probably that will loop through the system and
 --------call update on all the entities which then will call update on the components
-Holy shit this will not end well
+
+TODO:
+Better Message Bus
 */
 
+//Engines must implement Init(), Update(), and MainLoop()
 type Engine interface {
 	Init()
 	Update() bool
