@@ -1,11 +1,13 @@
 package systems
 
 import (
+	"fmt"
 	"github.com/Lathie/fulcrum/base"
+	"sync"
 )
 
 const (
-	MessageLimit = 50
+	MessageLimit = 10
 )
 
 //TextEngine has the follow fields:
@@ -65,7 +67,20 @@ func (t *TextEngine) Update() bool {
 //(repeat)
 //
 func (t *TextEngine) MainLoop() {
-	for t.Running {
-		t.Running = t.Update()
+	fmt.Printf("Main loop starting \n")
+
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	go t.Launch(t.Input)
+	go t.Launch(t.Logic)
+	go t.Launch(t.Bus)
+
+	wg.Wait()
+}
+
+func (t *TextEngine) Launch(s base.System) {
+	for {
+		s.Update()
 	}
 }

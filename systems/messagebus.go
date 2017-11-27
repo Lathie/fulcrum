@@ -38,24 +38,20 @@ func (m *MessageBus) SendMessage(channel chan base.Message, msg base.Message) bo
 }
 
 func (m *MessageBus) RecieveMessage() bool {
-	select {
-	case msg, ok := <-m.Inbox:
-		if ok {
-			switch msg.To {
-			case InputID:
-				m.SendMessage(m.Input, msg)
-			case LogicID:
-				m.SendMessage(m.Logic, msg)
-			default:
-				fmt.Printf("(MB) (ERROR) Message Bus could not deliver a message!\n")
-				fmt.Printf("....From: %d To: %d / Message: %s\n", msg.From, msg.To, msg.Content)
-			}
-		} else {
-			fmt.Println("(MB) Inbox Channel closed!")
-			return true
+
+	msg, ok := <-m.Inbox
+	if ok {
+		switch msg.To {
+		case InputID:
+			m.SendMessage(m.Input, msg)
+		case LogicID:
+			m.SendMessage(m.Logic, msg)
+		default:
+			fmt.Printf("(MB) (ERROR) Message Bus could not deliver a message!\n")
+			fmt.Printf("....From: %d To: %d / Message: %s\n", msg.From, msg.To, msg.Content)
 		}
-	default:
-		fmt.Printf("(MB) Nothing read from inbox\n")
+	} else {
+		fmt.Println("(MB) Inbox Channel closed!")
 		return true
 	}
 	return true

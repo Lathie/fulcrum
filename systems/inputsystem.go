@@ -2,7 +2,6 @@ package systems
 
 import (
 	"bufio"
-	//	"fmt"
 	"github.com/Lathie/fulcrum/base"
 	"os"
 )
@@ -35,8 +34,7 @@ func (e *InputSystem) Init() {
 //Update() method that gets called each game loop
 //Getline then sends the message to the logicsystem
 func (e *InputSystem) Update() bool {
-
-	e.RecieveMessage()
+	//e.RecieveMessage()
 
 	text := e.Getline()
 	e.SendMessage(LogicID, text, 0) //Send Message here

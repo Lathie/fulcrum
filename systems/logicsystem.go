@@ -21,7 +21,6 @@ func NewLogicSystem(in chan base.Message, out chan base.Message) *LogicSystem {
 
 //Update() gets called each game loop
 func (l *LogicSystem) Update() bool {
-
 	l.RecieveMessage()
 	return true
 }
@@ -34,15 +33,12 @@ func (l *LogicSystem) SendMessage() bool {
 //RecieveMessage processes messages sent from other systems
 func (l *LogicSystem) RecieveMessage() bool {
 
-	select {
-	case msg, ok := <-l.Inbox:
-		if ok {
-			fmt.Printf("(LS) IS to LS: %s", msg.Content)
-		} else {
-			fmt.Println("(LS) Inbox Channel closed!")
-		}
-	default:
-		return true
+	msg, ok := <-l.Inbox
+	if ok {
+		fmt.Printf("(LS) IS to LS: %s", msg.Content)
+	} else {
+		fmt.Println("(LS) Inbox Channel closed!")
 	}
+
 	return true
 }
