@@ -1,4 +1,4 @@
-package text_test
+package systems_test
 
 import (
 	"github.com/Lathie/fulcrum/text"
