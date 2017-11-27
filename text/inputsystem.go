@@ -14,13 +14,14 @@ import (
 type InputSystem struct {
 	Input    *bufio.Reader
 	Messages []base.Message
-	Logic    *LogicSystem
+	Inbox    chan base.Message
+	Outbox   chan base.Message
 }
 
 //Create a new InputSystem - static method
-func NewInputSystem(l *LogicSystem) *InputSystem {
+func NewInputSystem(in chan base.Message, out chan base.Message) *InputSystem {
 	ThisReader := bufio.NewReader(os.Stdin)
-	Input := InputSystem{Input: ThisReader, Messages: make([]base.Message, 0), Logic: l}
+	Input := InputSystem{Input: ThisReader, Messages: make([]base.Message, 0), Inbox: in, Outbox: out}
 	return &Input
 }
 
@@ -34,14 +35,12 @@ func (e *InputSystem) Init() {
 //Update() method that gets called each game loop
 //Getline then sends the message to the logicsystem
 func (e *InputSystem) Update() bool {
-	cont := true
-	for len(e.Messages) > 0 {
-		e.RecieveMessage()
-	}
+
+	e.RecieveMessage()
 
 	text := e.Getline()
-	e.SendMessage(e.Logic, text)
-	return cont
+	e.SendMessage(LogicID, text, 0) //Send Message here
+	return true
 }
 
 //Getline grabs a line from stdin
@@ -52,11 +51,14 @@ func (e *InputSystem) Getline() string {
 
 //SendMessage sends messages to other systems
 //Make this a channel or smt later
-func (e *InputSystem) SendMessage(s *LogicSystem, str string) bool {
-	s.Messages = append(s.Messages, base.Message{Sys: "input", Message: str, Code: 0})
+func (e *InputSystem) SendMessage(dest int, str string, c int) bool {
+	msg := base.Message{From: InputID, To: dest, Content: str, Code: c}
+	e.Outbox <- msg
 	return true
 }
 
+//Process recieved messages from other systems
+//Currently not in use since InputSystem doesn't respond to messages
 func (e *InputSystem) RecieveMessage() bool {
 	return true
 }

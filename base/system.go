@@ -6,6 +6,5 @@ package base
 //RecieveMessage - Systems must be able ro process messages
 type System interface {
 	Update() bool
-	SendMessage(s *System, str string) bool
 	RecieveMessage() bool
 }

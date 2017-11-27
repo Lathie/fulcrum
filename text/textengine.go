@@ -1,25 +1,34 @@
 package text
 
 import (
-//	"github.com/Lathie/fulcrum/base"
+	"github.com/Lathie/fulcrum/base"
+)
+
+const (
+	MessageLimit = 50
 )
 
 //TextEngine has the follow fields:
 //Input - a InputSystem
 //Logic - a LogicSystem
 type TextEngine struct {
-	//	Entities *EntitySystem
-	Input *InputSystem
-	Logic *LogicSystem
-	//	Output   *OutputSystem
+	Input   *InputSystem
+	Logic   *LogicSystem
+	Bus     *MessageBus
 	Running bool
+	Debug   bool
 }
 
 //NewEngine() creates a new TextEngine
-func NewEngine() *TextEngine {
-	MainLogic := NewLogicSystem()
-	MainInput := NewInputSystem(MainLogic)
-	Engine := TextEngine{Input: MainInput, Logic: MainLogic, Running: true}
+func NewEngine(debug bool) *TextEngine {
+	BusInbox := make(chan base.Message, MessageLimit)
+	InputInbox := make(chan base.Message, MessageLimit)
+	LogicInbox := make(chan base.Message, MessageLimit)
+
+	MainLogic := NewLogicSystem(LogicInbox, BusInbox)
+	MainInput := NewInputSystem(InputInbox, BusInbox)
+	MainBus := NewMessageBus(BusInbox, InputInbox, LogicInbox, debug)
+	Engine := TextEngine{Input: MainInput, Logic: MainLogic, Bus: MainBus, Running: true, Debug: debug}
 
 	return &Engine
 }
@@ -28,7 +37,7 @@ func NewEngine() *TextEngine {
 //This is deprecated, delete from interfaces/here
 func (t *TextEngine) Init() {
 	//	e.Entities = make(EntitySystem)
-	//e.Input = make(InputSystem)
+	//  e.Input = make(InputSystem)
 	//	e.Output = make(OutputSystem)
 	//	e.Logic = make(LogicSystem)
 
@@ -39,13 +48,12 @@ func (t *TextEngine) Init() {
 
 //Update() gets called each iteration of the gameloop
 func (t *TextEngine) Update() bool {
-	cont := true
-	//t.Output.Update()
+
 	t.Input.Update()
-	//t.LogicSystem.Update()
+	t.Bus.Update()
 	t.Logic.Update()
-	//t.EntitySystem.Update()
-	return cont
+
+	return true
 }
 
 //MainLoop() is the main loop of the game engine. It works as follows:

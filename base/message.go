@@ -5,7 +5,8 @@ package base
 //Message is a string with the message that the current system must read
 //Code is specific codes that register behaviors
 type Message struct {
-	Sys     string
-	Message string
+	From    int
+	To      int
+	Content string
 	Code    int
 }

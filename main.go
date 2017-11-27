@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	engine := text.NewEngine()
+	engine := text.NewEngine(true) //Create a new engine in debug mode
 	engine.MainLoop()
 }
