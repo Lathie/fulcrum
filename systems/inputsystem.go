@@ -3,6 +3,7 @@ package systems
 import (
 	"bufio"
 	"github.com/Lathie/fulcrum/base"
+	"github.com/Lathie/fulcrum/logging"
 	"os"
 )
 
@@ -21,6 +22,9 @@ type InputSystem struct {
 func NewInputSystem(in chan base.Message, out chan base.Message) *InputSystem {
 	ThisReader := bufio.NewReader(os.Stdin)
 	Input := InputSystem{Input: ThisReader, Messages: make([]base.Message, 0), Inbox: in, Outbox: out}
+
+	logging.Log("InputSystem", "Input System Initialized")
+
 	return &Input
 }
 

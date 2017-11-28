@@ -3,6 +3,8 @@ package systems
 import (
 	"fmt"
 	"github.com/Lathie/fulcrum/base"
+	"github.com/Lathie/fulcrum/logging"
+	"strconv"
 )
 
 const (
@@ -20,7 +22,7 @@ type MessageBus struct {
 
 func NewMessageBus(in chan base.Message, i chan base.Message, l chan base.Message, debug bool) *MessageBus {
 	thisMessageBus := MessageBus{Inbox: in, Input: i, Logic: l, Debug: debug}
-
+	logging.Log("MessageBus", "Message Bus Initialized")
 	return &thisMessageBus
 
 }
@@ -32,7 +34,9 @@ func (m *MessageBus) Update() bool {
 func (m *MessageBus) SendMessage(channel chan base.Message, msg base.Message) bool {
 	channel <- msg
 	if m.Debug {
-		fmt.Printf("(MB) Content: %s", msg.Content)
+		infostr := "Msg <" + msg.Content[:len(msg.Content)-1] + "> from " + strconv.Itoa(msg.From) + " to " + strconv.Itoa(msg.To)
+		fmt.Printf("(MB) %s\n", infostr)
+		logging.Log("MessageBus", infostr)
 	}
 	return true
 }
@@ -47,11 +51,10 @@ func (m *MessageBus) RecieveMessage() bool {
 		case LogicID:
 			m.SendMessage(m.Logic, msg)
 		default:
-			fmt.Printf("(MB) (ERROR) Message Bus could not deliver a message!\n")
-			fmt.Printf("....From: %d To: %d / Message: %s\n", msg.From, msg.To, msg.Content)
+			logging.Log("MessageBus", "(ERROR) Message Bus could not deliver a message!")
 		}
 	} else {
-		fmt.Println("(MB) Inbox Channel closed!")
+		logging.Log("MessageBus", "(ERROR) Message Bus channel inbox channel closed")
 		return true
 	}
 	return true

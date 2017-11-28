@@ -3,6 +3,7 @@ package systems
 import (
 	"fmt"
 	"github.com/Lathie/fulcrum/base"
+	"github.com/Lathie/fulcrum/logging"
 )
 
 //Logic systems has these fields
@@ -16,6 +17,9 @@ type LogicSystem struct {
 //NewLogicSystem creates a new LogicSystem
 func NewLogicSystem(in chan base.Message, out chan base.Message) *LogicSystem {
 	Logic := LogicSystem{Messages: make([]base.Message, 0), Inbox: in, Outbox: out}
+
+	logging.Log("LogicSystem", "Logic System Initialized")
+
 	return &Logic
 }
 

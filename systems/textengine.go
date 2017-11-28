@@ -3,6 +3,7 @@ package systems
 import (
 	"fmt"
 	"github.com/Lathie/fulcrum/base"
+	"github.com/Lathie/fulcrum/logging"
 	"sync"
 )
 
@@ -14,9 +15,10 @@ const (
 //Input - a InputSystem
 //Logic - a LogicSystem
 type TextEngine struct {
-	Input   *InputSystem
-	Logic   *LogicSystem
-	Bus     *MessageBus
+	Input *InputSystem
+	Logic *LogicSystem
+	Bus   *MessageBus
+
 	Running bool
 	Debug   bool
 }
@@ -30,7 +32,10 @@ func NewEngine(debug bool) *TextEngine {
 	MainLogic := NewLogicSystem(LogicInbox, BusInbox)
 	MainInput := NewInputSystem(InputInbox, BusInbox)
 	MainBus := NewMessageBus(BusInbox, InputInbox, LogicInbox, debug)
+
 	Engine := TextEngine{Input: MainInput, Logic: MainLogic, Bus: MainBus, Running: true, Debug: debug}
+
+	logging.Log("Master", "Engine Initialized")
 
 	return &Engine
 }
@@ -72,14 +77,16 @@ func (t *TextEngine) MainLoop() {
 	var wg sync.WaitGroup
 	wg.Add(3)
 
-	go t.Launch(t.Input)
-	go t.Launch(t.Logic)
-	go t.Launch(t.Bus)
+	go t.Launch(t.Input, "Input")
+	go t.Launch(t.Logic, "Logic")
+	go t.Launch(t.Bus, "Message Bus")
 
 	wg.Wait()
 }
 
-func (t *TextEngine) Launch(s base.System) {
+func (t *TextEngine) Launch(s base.System, str string) {
+	text := str + " thread started"
+	logging.Log("Master", text)
 	for {
 		s.Update()
 	}
