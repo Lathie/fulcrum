@@ -2,7 +2,7 @@ package systems_test
 
 import (
 	"fmt"
-	"github.com/Lathie/fulcrum/text"
+	"github.com/Lathie/fulcrum/systems"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -39,13 +39,13 @@ func equals(tb testing.TB, exp, act interface{}) {
 
 //Test that the NewEngine function works correctly
 func TestNewEngine(t *testing.T) {
-	engine := text.NewEngine()
+	engine := systems.NewEngine(true)
 	assert(t, engine.Running, "Engine is not Running")
 }
 
 //Test that the Update function for textengine works correctly
 func TestUpdate(t *testing.T) {
-	engine := text.NewEngine()
+	engine := systems.NewEngine(true)
 	boolean := engine.Update()
 	assert(t, boolean, "Update cycle failed")
 }

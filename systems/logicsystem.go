@@ -30,6 +30,7 @@ func (l *LogicSystem) Update() bool {
 }
 
 //SendMessage sends a message to another system
+//Currently does nothing
 func (l *LogicSystem) SendMessage() bool {
 	return true
 }

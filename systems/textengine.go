@@ -7,6 +7,8 @@ import (
 	"sync"
 )
 
+//Constants
+//MessageLimit - how many messages are allowed in a system
 const (
 	MessageLimit = 10
 )
@@ -54,23 +56,18 @@ func (t *TextEngine) Init() {
 }
 
 //Update() gets called each iteration of the gameloop
+//deprecated for now
 func (t *TextEngine) Update() bool {
 
-	t.Input.Update()
-	t.Bus.Update()
-	t.Logic.Update()
+	//t.Input.Update()
+	//t.Bus.Update()
+	//t.Logic.Update()
 
 	return true
 }
 
-//MainLoop() is the main loop of the game engine. It works as follows:
-//The game loop should:
-//Print Prompt
-//Get Line
-//Process Game Logic
-//Update all states
-//(repeat)
-//
+//MainLoop() is the main loop of the game engine.
+//It spawns goroutines and then waits for them to finish
 func (t *TextEngine) MainLoop() {
 	fmt.Printf("Main loop starting \n")
 
@@ -84,6 +81,8 @@ func (t *TextEngine) MainLoop() {
 	wg.Wait()
 }
 
+//Launch takes an interface and wraps it's Update() function in a for loop
+//This is to start a goroutine for a system
 func (t *TextEngine) Launch(s base.System, str string) {
 	text := str + " thread started"
 	logging.Log("Master", text)

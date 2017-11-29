@@ -9,19 +9,18 @@ import (
 
 //InputSystem has these fields:
 //Input - a pointer to a bufio.Reader
-//Messages - A slice of messages to process
-//Logic - A pointer to the engine's LogicSystem
+//Inbox - A buffered channel for recieving messages
+//Outbox - MessageBus' inbox
 type InputSystem struct {
-	Input    *bufio.Reader
-	Messages []base.Message
-	Inbox    chan base.Message
-	Outbox   chan base.Message
+	Input  *bufio.Reader
+	Inbox  chan base.Message
+	Outbox chan base.Message
 }
 
 //Create a new InputSystem - static method
 func NewInputSystem(in chan base.Message, out chan base.Message) *InputSystem {
 	ThisReader := bufio.NewReader(os.Stdin)
-	Input := InputSystem{Input: ThisReader, Messages: make([]base.Message, 0), Inbox: in, Outbox: out}
+	Input := InputSystem{Input: ThisReader, Inbox: in, Outbox: out}
 
 	logging.Log("InputSystem", "Input System Initialized")
 
