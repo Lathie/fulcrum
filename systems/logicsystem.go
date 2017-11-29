@@ -41,6 +41,7 @@ func (l *LogicSystem) RecieveMessage() bool {
 	msg, ok := <-l.Inbox
 	if ok {
 		fmt.Printf("(LS) IS to LS: %s", msg.Content)
+		logging.Log("LogicSystem", "Message Recieved")
 	} else {
 		fmt.Println("(LS) Inbox Channel closed!")
 	}

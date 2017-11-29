@@ -55,6 +55,7 @@ func (e *InputSystem) Getline() string {
 func (e *InputSystem) SendMessage(dest int, str string, c int) bool {
 	msg := base.Message{From: InputID, To: dest, Content: str, Code: c}
 	e.Outbox <- msg
+	logging.Log("InputSystem", "Message Sent")
 	return true
 }
 
