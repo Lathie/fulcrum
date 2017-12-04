@@ -45,18 +45,8 @@ func (p *PivotSystem) RecieveMessage() bool {
 func (p *PivotSystem) ParseMessage(msg base.Message) bool {
 	if msg.From == LogicID {
 		switch msg.Code {
-		case pivots.North:
-			fmt.Println("North recieved by WS")
-		case pivots.East:
-			fmt.Println("East recieved by WS")
-		case pivots.South:
-			fmt.Println("South recieved by WS")
-		case pivots.West:
-			fmt.Println("West recieved by WS")
-		case pivots.Up:
-			fmt.Println("Up recieved by WS")
-		case pivots.Down:
-			fmt.Println("Down recieved by WS")
+		case pivots.North, pivots.East, pivots.South, pivots.West, pivots.Up, pivots.Down:
+			p.Move(msg.Code)
 		case pivots.Look:
 			fmt.Println(p.Hero.Location)
 			fmt.Printf("%s | %s \n", p.CurrentRoom().Name, p.CurrentRoom().Desc)
@@ -68,4 +58,13 @@ func (p *PivotSystem) ParseMessage(msg base.Message) bool {
 func (p *PivotSystem) CurrentRoom() pivots.Room {
 	room := p.Realm.Map[p.Hero.Location[0]][p.Hero.Location[1]][p.Hero.Location[2]]
 	return room
+}
+
+func (p *PivotSystem) Move(direction int) bool {
+	if p.CurrentRoom().Exits[direction] {
+		fmt.Println("Can move in that direction")
+	} else {
+		fmt.Println("No exit in that direction")
+	}
+	return true
 }

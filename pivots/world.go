@@ -19,7 +19,7 @@ type World struct {
 //Future: Store and retrieve worlds from a json encoding probably
 func NewWorld() World {
 	//Create inital root Room
-	exits := [6]int{0, 0, 0, 0, 0, 0}
+	exits := [6]bool{false, false, false, false, false, false}
 	name := "A empty room"
 	description := "This is the initial room"
 	descrip_all := "Upon further inspection, the room is completely empty"

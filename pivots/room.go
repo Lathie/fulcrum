@@ -5,7 +5,7 @@ import (
 )
 
 type Room struct {
-	Exits    [6]int
+	Exits    [6]bool
 	Name     string
 	Desc     string
 	DescAll  string
