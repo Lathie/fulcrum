@@ -19,7 +19,7 @@ const (
 type TextEngine struct {
 	Input *InputSystem
 	Logic *LogicSystem
-	World *WorldSystem
+	Pivot *PivotSystem
 	Bus   *MessageBus
 
 	Running bool
@@ -31,14 +31,14 @@ func NewEngine(debug bool) *TextEngine {
 	BusInbox := make(chan base.Message, MessageLimit)
 	InputInbox := make(chan base.Message, MessageLimit)
 	LogicInbox := make(chan base.Message, MessageLimit)
-	WorldInbox := make(chan base.Message, MessageLimit)
+	PivotInbox := make(chan base.Message, MessageLimit)
 
 	MainLogic := NewLogicSystem(LogicInbox, BusInbox)
 	MainInput := NewInputSystem(InputInbox, BusInbox)
-	MainWorld := NewWorldSystem(WorldInbox, BusInbox)
-	MainBus := NewMessageBus(BusInbox, InputInbox, LogicInbox, WorldInbox, debug)
+	MainPivot := NewPivotSystem(PivotInbox, BusInbox)
+	MainBus := NewMessageBus(BusInbox, InputInbox, LogicInbox, PivotInbox, debug)
 
-	Engine := TextEngine{Input: MainInput, Logic: MainLogic, World: MainWorld, Bus: MainBus, Running: true, Debug: debug}
+	Engine := TextEngine{Input: MainInput, Logic: MainLogic, Pivot: MainPivot, Bus: MainBus, Running: true, Debug: debug}
 
 	logging.Log("Master", "Engine Initialized")
 
@@ -80,7 +80,7 @@ func (t *TextEngine) MainLoop() {
 	go t.Launch(t.Input, "Input")
 	go t.Launch(t.Logic, "Logic")
 	go t.Launch(t.Bus, "Message Bus")
-	go t.Launch(t.World, "World")
+	go t.Launch(t.Pivot, "Pivot")
 
 	wg.Wait()
 }

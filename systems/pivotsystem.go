@@ -7,7 +7,7 @@ import (
 	"github.com/Lathie/fulcrum/pivots"
 )
 
-type WorldSystem struct {
+type PivotSystem struct {
 	Inbox  chan base.Message
 	Outbox chan base.Message
 
@@ -15,34 +15,34 @@ type WorldSystem struct {
 	Realm *pivots.World
 }
 
-func NewWorldSystem(in chan base.Message, out chan base.Message) *WorldSystem {
+func NewPivotSystem(in chan base.Message, out chan base.Message) *PivotSystem {
 	worldMap := pivots.NewWorld()
 	player := pivots.NewPlayer(true)
-	world := WorldSystem{Inbox: in, Outbox: out, Realm: &worldMap, Hero: &player}
-	logging.Log("WorldSystem", "World System Initialized")
-	return &world
+	pivot := PivotSystem{Inbox: in, Outbox: out, Realm: &worldMap, Hero: &player}
+	logging.Log("PivotSystem", "Pivot System Initialized")
+	return &pivot
 }
 
-func (w *WorldSystem) Update() bool {
-	w.RecieveMessage()
+func (p *PivotSystem) Update() bool {
+	p.RecieveMessage()
 	return true
 }
 
-func (w *WorldSystem) SendMessage() bool {
+func (p *PivotSystem) SendMessage() bool {
 	return true
 }
 
-func (w *WorldSystem) RecieveMessage() bool {
-	msg, ok := <-w.Inbox
+func (p *PivotSystem) RecieveMessage() bool {
+	msg, ok := <-p.Inbox
 	if ok {
-		w.ParseMessage(msg)
+		p.ParseMessage(msg)
 	} else {
-		logging.Log("WorldSystem", "Inbox Channel closed!")
+		logging.Log("PivotSystem", "Inbox Channel closed!")
 	}
 	return true
 }
 
-func (w *WorldSystem) ParseMessage(msg base.Message) bool {
+func (p *PivotSystem) ParseMessage(msg base.Message) bool {
 	if msg.From == LogicID {
 		switch msg.Code {
 		case pivots.North:
@@ -58,14 +58,14 @@ func (w *WorldSystem) ParseMessage(msg base.Message) bool {
 		case pivots.Down:
 			fmt.Println("Down recieved by WS")
 		case pivots.Look:
-			fmt.Println(w.Hero.Location)
-			fmt.Printf("%s | %s \n", w.CurrentRoom().Name, w.CurrentRoom().Desc)
+			fmt.Println(p.Hero.Location)
+			fmt.Printf("%s | %s \n", p.CurrentRoom().Name, p.CurrentRoom().Desc)
 		}
 	}
 	return true
 }
 
-func (w *WorldSystem) CurrentRoom() pivots.Room {
-	room := w.Realm.Map[w.Hero.Location[0]][w.Hero.Location[1]][w.Hero.Location[2]]
+func (p *PivotSystem) CurrentRoom() pivots.Room {
+	room := p.Realm.Map[p.Hero.Location[0]][p.Hero.Location[1]][p.Hero.Location[2]]
 	return room
 }
