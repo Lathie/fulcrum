@@ -47,15 +47,16 @@ func (e *InputSystem) Update() bool {
 //Getline grabs a line from stdin
 func (e *InputSystem) Getline() string {
 	text, _ := e.Input.ReadString('\n')
-	return text
+	//Strip the newline char
+	return text[:len(text)-1]
 }
 
 //SendMessage sends messages to other systems
 //Make this a channel or smt later
 func (e *InputSystem) SendMessage(dest int, str string, c int) bool {
-	msg := base.Message{From: InputID, To: dest, Content: str, Code: c}
+	msg := base.Message{From: InputID, To: dest, Content: str, Code: c, Args: nil}
 	e.Outbox <- msg
-	logging.Log("InputSystem", "Message Sent")
+	//logging.Log("InputSystem", "Message Sent")
 	return true
 }
 

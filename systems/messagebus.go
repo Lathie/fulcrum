@@ -11,6 +11,7 @@ import (
 const (
 	InputID = iota
 	LogicID
+	WorldID
 )
 
 //Inbox - Channel containing incoming messages from other systems
@@ -20,13 +21,14 @@ type MessageBus struct {
 	Inbox chan base.Message
 	Input chan base.Message
 	Logic chan base.Message
+	World chan base.Message
 
 	Debug bool
 }
 
 //Create a new MessageBus - Static Method
-func NewMessageBus(in chan base.Message, i chan base.Message, l chan base.Message, debug bool) *MessageBus {
-	thisMessageBus := MessageBus{Inbox: in, Input: i, Logic: l, Debug: debug}
+func NewMessageBus(in chan base.Message, i chan base.Message, l chan base.Message, w chan base.Message, debug bool) *MessageBus {
+	thisMessageBus := MessageBus{Inbox: in, Input: i, Logic: l, World: w, Debug: debug}
 	logging.Log("MessageBus", "Message Bus Initialized")
 	return &thisMessageBus
 
@@ -41,7 +43,7 @@ func (m *MessageBus) Update() bool {
 func (m *MessageBus) SendMessage(channel chan base.Message, msg base.Message) bool {
 	channel <- msg
 	if m.Debug {
-		infostr := "Content: " + msg.Content[:len(msg.Content)-1] + " | from " + strconv.Itoa(msg.From) + " to " + strconv.Itoa(msg.To)
+		infostr := "Content: " + msg.Content + " | from " + strconv.Itoa(msg.From) + " to " + strconv.Itoa(msg.To)
 		fmt.Printf("(MB) %s\n", infostr)
 		logging.Log("MessageBus", infostr)
 	}
@@ -58,6 +60,8 @@ func (m *MessageBus) RecieveMessage() bool {
 			m.SendMessage(m.Input, msg)
 		case LogicID:
 			m.SendMessage(m.Logic, msg)
+		case WorldID:
+			m.SendMessage(m.World, msg)
 		default:
 			logging.Log("MessageBus", "(ERROR) Message Bus could not deliver a message!")
 		}

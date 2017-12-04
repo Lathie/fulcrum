@@ -9,4 +9,5 @@ type Message struct {
 	To      int
 	Content string
 	Code    int
+	Args    []string
 }
