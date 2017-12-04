@@ -4,21 +4,6 @@ import (
 //	"github.com/Lathie/fulcrum/systems"
 )
 
-const (
-	North = iota
-	East
-	South
-	West
-	Up
-	Down
-)
-
-const (
-	X = iota
-	Y
-	Z
-)
-
 type Room struct {
 	Exits    [6]int
 	Name     string

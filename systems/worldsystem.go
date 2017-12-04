@@ -57,7 +57,7 @@ func (w *WorldSystem) ParseMessage(msg base.Message) bool {
 			fmt.Println("Up recieved by WS")
 		case pivots.Down:
 			fmt.Println("Down recieved by WS")
-		case Look:
+		case pivots.Look:
 			fmt.Println(w.Hero.Location)
 			fmt.Printf("%s | %s \n", w.CurrentRoom().Name, w.CurrentRoom().Desc)
 		}

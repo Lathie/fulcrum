@@ -7,11 +7,6 @@ import (
 	"github.com/Lathie/fulcrum/pivots"
 )
 
-//refactor consts into seperate package probably
-const (
-	Look = 99
-)
-
 //Logic systems has these fields
 //Messages - a slice to hold messages from other systems
 type LogicSystem struct {
@@ -71,7 +66,7 @@ func (l *LogicSystem) ParseMessage(msg base.Message) bool {
 		case "down", "d":
 			l.SendMessage(WorldID, "Move Down", pivots.Down)
 		case "look", "l":
-			l.SendMessage(WorldID, "Look", Look)
+			l.SendMessage(WorldID, "Look", pivots.Look)
 		}
 		return true
 	} else {
