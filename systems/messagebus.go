@@ -1,7 +1,7 @@
 package systems
 
 import (
-	"fmt"
+	//	"fmt"
 	"github.com/Lathie/fulcrum/base"
 	"github.com/Lathie/fulcrum/logging"
 	"strconv"
@@ -44,7 +44,7 @@ func (m *MessageBus) SendMessage(channel chan base.Message, msg base.Message) bo
 	channel <- msg
 	if m.Debug {
 		infostr := "Content: " + msg.Content + " | from " + strconv.Itoa(msg.From) + " to " + strconv.Itoa(msg.To)
-		fmt.Printf("(MB) %s\n", infostr)
+		//fmt.Printf("(MB) %s\n", infostr)
 		logging.Log("MessageBus", infostr)
 	}
 	return true

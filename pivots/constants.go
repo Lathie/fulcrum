@@ -18,5 +18,6 @@ const (
 )
 
 const (
-	Look = 99
+	Look    = 99
+	LookAll = 100
 )

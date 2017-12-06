@@ -50,6 +50,10 @@ func (p *PivotSystem) ParseMessage(msg base.Message) bool {
 		case pivots.Look:
 			fmt.Println(p.Hero.Location)
 			fmt.Printf("%s | %s \n", p.CurrentRoom().Name, p.CurrentRoom().Desc)
+		case pivots.LookAll:
+			fmt.Println(p.Hero.Location)
+			fmt.Printf("%s | %s \n%s\n", p.CurrentRoom().Name, p.CurrentRoom().Desc, p.CurrentRoom().DescAll)
+
 		}
 	}
 	return true
@@ -62,7 +66,20 @@ func (p *PivotSystem) CurrentRoom() pivots.Room {
 
 func (p *PivotSystem) Move(direction int) bool {
 	if p.CurrentRoom().Exits[direction] {
-		fmt.Println("Can move in that direction")
+		switch direction {
+		case pivots.North:
+			p.Hero.Location[0] += 1
+		case pivots.East:
+			p.Hero.Location[1] += 1
+		case pivots.South:
+			p.Hero.Location[0] -= 1
+		case pivots.West:
+			p.Hero.Location[1] -= 1
+		case pivots.Up:
+			p.Hero.Location[2] += 1
+		case pivots.Down:
+			p.Hero.Location[2] -= 1
+		}
 	} else {
 		fmt.Println("No exit in that direction")
 	}
