@@ -28,7 +28,10 @@ func (p *PivotSystem) Update() bool {
 	return true
 }
 
-func (p *PivotSystem) SendMessage() bool {
+func (p *PivotSystem) SendMessage(dest int, str string, c int) bool {
+	msg := base.Message{From: InputID, To: dest, Content: str, Code: c, Args: nil}
+	e.Outbox <- msg
+
 	return true
 }
 
@@ -83,5 +86,10 @@ func (p *PivotSystem) Move(direction int) bool {
 	} else {
 		fmt.Println("No exit in that direction")
 	}
+	return true
+}
+
+func (p *PivotSystem) Output(msg string) bool {
+	p.SendMessage(OutputID, msg, 0)
 	return true
 }

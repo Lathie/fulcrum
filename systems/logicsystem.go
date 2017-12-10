@@ -76,6 +76,7 @@ func (l *LogicSystem) ParseMessage(msg base.Message) bool {
 		logging.Log("LogicSystem", "LogicSystem encountered a message not from InputSystem")
 	}
 	logging.Log("LogicSystem", "Command not recognized")
+
 	//Here tell output to tell the user that they fucked up
 	return true
 }

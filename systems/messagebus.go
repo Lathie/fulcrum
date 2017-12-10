@@ -12,23 +12,25 @@ const (
 	InputID = iota
 	LogicID
 	WorldID
+	OutputID
 )
 
 //Inbox - Channel containing incoming messages from other systems
 //Input - Channel that is the inbox for InputSystem
 //Logic - Channel that is the inbox for LogicSystem
 type MessageBus struct {
-	Inbox chan base.Message
-	Input chan base.Message
-	Logic chan base.Message
-	World chan base.Message
+	Inbox  chan base.Message
+	Input  chan base.Message
+	Logic  chan base.Message
+	World  chan base.Message
+	Output chan base.Message
 
 	Debug bool
 }
 
 //Create a new MessageBus - Static Method
-func NewMessageBus(in chan base.Message, i chan base.Message, l chan base.Message, w chan base.Message, debug bool) *MessageBus {
-	thisMessageBus := MessageBus{Inbox: in, Input: i, Logic: l, World: w, Debug: debug}
+func NewMessageBus(in chan base.Message, i chan base.Message, l chan base.Message, w chan base.Message, o chan base.Message, debug bool) *MessageBus {
+	thisMessageBus := MessageBus{Inbox: in, Input: i, Logic: l, World: w, Output: o, Debug: debug}
 	logging.Log("MessageBus", "Message Bus Initialized")
 	return &thisMessageBus
 
@@ -62,6 +64,8 @@ func (m *MessageBus) RecieveMessage() bool {
 			m.SendMessage(m.Logic, msg)
 		case WorldID:
 			m.SendMessage(m.World, msg)
+		case OutputID:
+			m.SendMessage(m.Output, msg)
 		default:
 			logging.Log("MessageBus", "(ERROR) Message Bus could not deliver a message!")
 		}
