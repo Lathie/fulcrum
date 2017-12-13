@@ -69,7 +69,8 @@ func (l *LogicSystem) ParseMessage(msg base.Message) bool {
 			l.SendMessage(WorldID, "Look", pivots.Look)
 		case "look all", "la":
 			l.SendMessage(WorldID, "Look All", pivots.LookAll)
-
+		case "save":
+			l.SendMessage(WorldID, "Save Map", pivots.SaveWorld)
 		}
 		return true
 	} else {

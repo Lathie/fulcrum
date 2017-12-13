@@ -18,6 +18,7 @@ const (
 )
 
 const (
-	Look    = 99
-	LookAll = 100
+	Look      = 99
+	LookAll   = 100
+	SaveWorld = 101
 )

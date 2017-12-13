@@ -30,7 +30,7 @@ func (p *PivotSystem) Update() bool {
 
 func (p *PivotSystem) SendMessage(dest int, str string, c int) bool {
 	msg := base.Message{From: InputID, To: dest, Content: str, Code: c, Args: nil}
-	e.Outbox <- msg
+	p.Outbox <- msg
 
 	return true
 }
@@ -56,7 +56,8 @@ func (p *PivotSystem) ParseMessage(msg base.Message) bool {
 		case pivots.LookAll:
 			fmt.Println(p.Hero.Location)
 			fmt.Printf("%s | %s \n%s\n", p.CurrentRoom().Name, p.CurrentRoom().Desc, p.CurrentRoom().DescAll)
-
+		case pivots.SaveWorld:
+			p.Realm.ExportWorld("world.json")
 		}
 	}
 	return true

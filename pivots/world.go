@@ -1,14 +1,15 @@
 package pivots
 
 import (
-//
+	"encoding/json"
+	"io/ioutil"
 )
 
 const (
-	MaxWorldSize   = 100
+	MaxWorldSize   = 20
 	MaxWorldHeight = 10
-	RootX          = 50
-	RootY          = 50
+	RootX          = 10
+	RootY          = 10
 	RootZ          = 3
 )
 
@@ -45,4 +46,30 @@ func NewWorld() World {
 	world.Map[RootX][RootY][RootZ] = newRoom
 	world.Map[RootX+1][RootY][RootZ] = otherNewRoom
 	return world
+}
+
+func (w *World) ExportWorld(filename string) bool {
+	var writer []byte
+	for i := 0; i < MaxWorldSize; i++ {
+		for j := 0; j < MaxWorldSize; j++ {
+			for k := 0; k < MaxWorldHeight; k++ {
+				if w.Map[i][j][k].Exists {
+					b, err := json.Marshal(w.Map[i][j][k])
+					if err == nil {
+						writer = append(writer, b...)
+					}
+				}
+			}
+		}
+	}
+	err := ioutil.WriteFile(filename, writer, 0644)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+//Import the world again lol
+func (w *World) ImportWorld(filename string) {
+
 }
